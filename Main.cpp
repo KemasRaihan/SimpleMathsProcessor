@@ -33,8 +33,50 @@ int divide(int x, int y) {
 int (*MathFuncs[4])(int, int) = {add, sub, mul, divide};
 
 int (*getMathFunc(int choice))(int, int) {
-	assert(choice > 0 && choice < 4);
 	return MathFuncs[choice - 1];
+}
+
+void askUser() {
+
+
+	char option, symbol;
+	int x, y, res;
+	int(*mathFunc)(int, int);
+	bool invalid;
+	do {
+		invalid = false;
+		std::cout << "Please choose a mathematical operation:\n";
+		std::cout << "1. Addition\n";
+		std::cout << "2. Subtraction\n";
+		std::cout << "3. Multiplication\n";
+		std::cout << "4. Division\n";
+
+		std::cout << "Please enter an option: ";
+		std::cin >> option;
+
+		// user enters a valid index
+		switch (option) {
+		case '1':
+			symbol = '+';
+			break;
+		case '2':
+			symbol = '-';
+			break;
+		case '3':
+			symbol = 'x';
+			break;
+		case '4':
+			symbol = '/';
+			break;
+		default:
+			invalid = true;
+			std::cout << "Invalid input please try again....";
+		}
+	} while (invalid);
+
+	mathFunc = getMathFunc(option);
+
+
 }
 
 
