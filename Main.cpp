@@ -40,12 +40,13 @@ void askUser() {
 
 
 	char option, symbol;
-	int x, y, res;
+
 	int(*mathFunc)(int, int);
 	bool invalid;
+
 	do {
 		invalid = false;
-		std::cout << "Please choose a mathematical operation:\n";
+		std::cout << "\nPlease choose a mathematical operation:\n";
 		std::cout << "1. Addition\n";
 		std::cout << "2. Subtraction\n";
 		std::cout << "3. Multiplication\n";
@@ -70,11 +71,24 @@ void askUser() {
 			break;
 		default:
 			invalid = true;
-			std::cout << "Invalid input please try again....";
+			std::cout << "\nInvalid input please try again....\n";
 		}
 	} while (invalid);
 
-	mathFunc = getMathFunc(option);
+	// convert char of option to int 
+	int intOp = (int)(option - '0');
+	mathFunc = getMathFunc(intOp);
+
+	int x, y, res;
+
+	while (true) {
+		std::cout << "x = ";
+		std::cin >> x;
+		std::cout << "y = ";
+		std::cin >> y;
+		res = mathFunc(x, y);
+		std::cout << x << " " << symbol << " " << y << " = " << res << "\n";
+	}
 
 
 }
@@ -88,10 +102,7 @@ int main()
 	_onexit(_CrtDumpMemoryLeaks);
 #endif
 
-	int x = 1;
-	int y = 2;
-
-	std::cout << getMathFunc(3)(x, y) << "\n";
+	askUser();
 
 	return 0;
 }
