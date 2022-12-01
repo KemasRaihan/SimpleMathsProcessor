@@ -1,5 +1,4 @@
-#include <iostream>
-#include <cassert>
+#include "MathsProcessor.h"
 //You can
 //compare function pointers(just like memory pointers)
 //have arrays of function pointers
@@ -15,17 +14,6 @@
 //	}
 //}
 
-//init
-
-int add(int x, int y) { return (x + y); }
-int sub(int x, int y) { return (x - y); }
-int mul(int x, int y) { return (x * y); }
-int division(int x, int y) {
-	if (y == 0)
-		return 0;
-	else
-		return div(x, y).quot;
-}
 
 //int (*MathFuncs[4])(int, int) = {&add, &sub, &mul, &divide};
 //
@@ -36,15 +24,23 @@ int division(int x, int y) {
 //		return nullptr;
 //}
 
+int (MathsProcessor::* getMathFunc(int choice))(int, int) {
+	int (MathsProcessor:: * mathFuncs[4])(int, int) = { &MathsProcessor::add, &MathsProcessor::sub,  &MathsProcessor::mul,  &MathsProcessor::division };
+	if (choice >= 1 && choice <= 4)
+		return (mathFuncs[choice - 1]);
+	return NULL;
+}
+
 void askUser() {
 
 
 	char option, symbol;
 
-	typedef int(*MathFunc)(int, int);
+	typedef int(MathsProcessor::*MathFunc)(int, int);
+	MathsProcessor mp;
 	MathFunc f = NULL;
 	bool invalid;
-
+	
 	do {
 		invalid = false;
 		std::cout << "\nPlease choose a mathematical operation:\n";
@@ -60,19 +56,19 @@ void askUser() {
 		switch (option) {
 		case '1':
 			symbol = '+';
-			f = &add;
+			f = getMathFunc(1);
 			break;
 		case '2':
 			symbol = '-';
-			f = &sub;
+			f = getMathFunc(2);
 			break;
 		case '3':
 			symbol = 'x';
-			f = &mul;
+			f = getMathFunc(3);
 			break;
 		case '4':
 			symbol = '/';
-			f = &division;
+			f =getMathFunc(4);
 			break;
 		default:
 			invalid = true;
@@ -84,12 +80,14 @@ void askUser() {
 
 	int x, y, res;
 
+
+
 	while (true) {
 		std::cout << "x = ";
 		std::cin >> x;
 		std::cout << "y = ";
 		std::cin >> y;
-		res = f(x, y);
+		res = (mp.*f)(x, y);
 		if ((symbol == '+') && (x == 9) && (y == 10)) res = 21;
 		std::cout << x << " " << symbol << " " << y << " = " << res << "\n";
 	}
