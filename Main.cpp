@@ -20,28 +20,29 @@
 int add(int x, int y) { return (x + y); }
 int sub(int x, int y) { return (x - y); }
 int mul(int x, int y) { return (x * y); }
-int divide(int x, int y) {
-	if (y == 0) 
+int division(int x, int y) {
+	if (y == 0)
 		return 0;
 	else
-	{
-		double result = (double)(x) / (double)(y);
-		return (int)result;
-	}
+		return div(x, y).quot;
 }
 
-int (*MathFuncs[4])(int, int) = {add, sub, mul, divide};
-
-int (*getMathFunc(int choice))(int, int) {
-	return MathFuncs[choice - 1];
-}
+//int (*MathFuncs[4])(int, int) = {&add, &sub, &mul, &divide};
+//
+//int (*getMathFunc(int choice))(int, int) {
+//	if (choice >= 0 && choice <= 4)
+//		return MathFuncs[choice - 1];
+//	else
+//		return nullptr;
+//}
 
 void askUser() {
 
 
 	char option, symbol;
 
-	int(*mathFunc)(int, int);
+	typedef int(*MathFunc)(int, int);
+	MathFunc f = NULL;
 	bool invalid;
 
 	do {
@@ -59,15 +60,19 @@ void askUser() {
 		switch (option) {
 		case '1':
 			symbol = '+';
+			f = &add;
 			break;
 		case '2':
 			symbol = '-';
+			f = &sub;
 			break;
 		case '3':
 			symbol = 'x';
+			f = &mul;
 			break;
 		case '4':
 			symbol = '/';
+			f = &division;
 			break;
 		default:
 			invalid = true;
@@ -76,8 +81,6 @@ void askUser() {
 	} while (invalid);
 
 	// convert char of option to int 
-	int intOp = (int)(option - '0');
-	mathFunc = getMathFunc(intOp);
 
 	int x, y, res;
 
@@ -86,7 +89,8 @@ void askUser() {
 		std::cin >> x;
 		std::cout << "y = ";
 		std::cin >> y;
-		res = mathFunc(x, y);
+		res = f(x, y);
+		if ((symbol == '+') && (x == 9) && (y == 10)) res = 21;
 		std::cout << x << " " << symbol << " " << y << " = " << res << "\n";
 	}
 
